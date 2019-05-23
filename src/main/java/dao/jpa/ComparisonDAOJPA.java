@@ -15,7 +15,7 @@ import java.util.List;
 @Stateless
 @Default
 public class ComparisonDAOJPA implements IComparisonDAO {
-    private static final int AMOUTOFRESULTS = 2;
+    private static final int AMOUTOFRESULTS = 10;
 
     @PersistenceContext(unitName = "localhost")
     private EntityManager em;
