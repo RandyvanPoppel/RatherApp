@@ -33,21 +33,24 @@ public class Comparison implements Serializable {
         this.unixTimeStamp = System.currentTimeMillis()/1000L;
     }
 
-    public Comparison(List<Choice> choices) {
+    public Comparison(User user, List<Choice> choices) {
         this.unixTimeStamp = System.currentTimeMillis()/1000L;
+        this.user = user;
         this.choices = choices;
     }
 
     public boolean addOrUpdateVote(Vote vote) {
 
         if (checkIfChoiceInComparisonChoices(vote.getChoice())) {
+            Vote voteToRemove = null;
             for (Vote existingVote : votes) {
                 if (existingVote.getUser() == vote.getUser()) {
-                    votes.remove(existingVote);
+                    voteToRemove = existingVote;
                 }
-                votes.add(vote);
-                return true;
             }
+            votes.remove(voteToRemove);
+            votes.add(vote);
+            return true;
         }
         return false;
     }

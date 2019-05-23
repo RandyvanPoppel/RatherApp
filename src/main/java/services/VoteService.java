@@ -2,9 +2,11 @@ package services;
 
 import dao.blueprint.IChoiceDAO;
 import dao.blueprint.IComparisonDAO;
+import dao.blueprint.IUserDAO;
 import dao.blueprint.IVoteDAO;
 import models.Choice;
 import models.Comparison;
+import models.User;
 import models.Vote;
 
 import javax.ejb.Stateless;
@@ -12,9 +14,8 @@ import javax.inject.Inject;
 
 @Stateless
 public class VoteService {
-
     @Inject
-    private IVoteDAO voteDAO;
+    private IUserDAO userDAO;
 
     @Inject
     private IChoiceDAO choiceDAO;
@@ -22,26 +23,26 @@ public class VoteService {
     @Inject
     private IComparisonDAO comparisonDAO;
 
+    @Inject
+    private IVoteDAO voteDAO;
+
     public VoteService() {}
 
     public Vote vote(long comparisonId, long choiceId) {
         Choice choice = choiceDAO.getById(choiceId);
-        System.out.println(choice);
-        System.out.println("AFTER CHOICE");
         if (choice != null)
         {
-            System.out.println("Choice found");
             Comparison comparison = comparisonDAO.getById(comparisonId);
             if (comparison != null)
             {
-                System.out.println("Comparison found");
-                Vote vote = new Vote(choice);
+                // TODO: [AUTH] Get user from Authentication system
+                User votingUser = userDAO.getById(2);
+
+                Vote vote = new Vote(votingUser, choice);
                 if(comparison.addOrUpdateVote(vote))
                 {
-                    System.out.println("Choice found in Comparison");
-                    voteDAO.addVote(vote);
+                    comparisonDAO.updateComparison(comparison);
                     return vote;
-                    //TODO: Update comparison and persist/update vote
                 }
             }
         }

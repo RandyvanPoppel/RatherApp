@@ -1,22 +1,16 @@
 package models;
 
 import javax.persistence.*;
-import java.util.ArrayList;
-import java.util.List;
+import java.io.Serializable;
 
 @Entity(name = "User")
-public class User {
+public class User implements Serializable {
     @Id
     @GeneratedValue
     private long id;
 
-    @OneToMany(
-            cascade = CascadeType.ALL,
-            orphanRemoval = true
-    )
-    private List<Vote> votes = new ArrayList<>();
-
-    public User() {}
+    public User() {
+    }
 
     public User(long id) {
         this.id = id;
@@ -24,13 +18,5 @@ public class User {
 
     public long getId() {
         return id;
-    }
-
-    public List<Vote> getVotes() {
-        return votes;
-    }
-
-    public void setVotes(List<Vote> votes) {
-        this.votes = votes;
     }
 }

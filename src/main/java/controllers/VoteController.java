@@ -18,11 +18,8 @@ public class VoteController {
     @POST
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
-    public Vote vote(@QueryParam("comparisonid") final String comparisonId,
-                     @QueryParam("choiceid") final String choiceId) {
-        System.out.println(comparisonId);
-        System.out.println(choiceId);
-        System.out.println("REQUEST RECEIVED");
-        return voteService.vote(Long.parseLong(comparisonId), Long.parseLong(choiceId));
+    public Vote vote(@QueryParam("comparisonId") final long comparisonId,
+                     @QueryParam("choiceId") final long choiceId) {
+        return voteService.vote(comparisonId, choiceId);
     }
 }

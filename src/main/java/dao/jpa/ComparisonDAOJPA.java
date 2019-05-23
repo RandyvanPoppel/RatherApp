@@ -27,6 +27,12 @@ public class ComparisonDAOJPA implements IComparisonDAO {
     }
 
     @Override
+    public Comparison updateComparison(Comparison comparison) {
+        em.merge(comparison);
+        return comparison;
+    }
+
+    @Override
     public List<Comparison> getLatestComparisons(long unixTimeStamp) {
         TypedQuery<Comparison> query = em.createNamedQuery("comparison.getLatest", Comparison.class);
         query.setParameter("unixTimeStamp", unixTimeStamp);

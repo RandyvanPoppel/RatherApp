@@ -17,7 +17,8 @@ public class Vote {
 
     public Vote() {}
 
-    public Vote(Choice choice) {
+    public Vote(User user, Choice choice) {
+        this.user = user;
         this.choice = choice;
     }
 
