@@ -1,5 +1,8 @@
 package models;
 
+import models.hateoas.Link;
+import models.hateoas.RequestMethod;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -28,6 +31,8 @@ public class Comparison implements Serializable {
     private long unixTimeStamp;
     @ManyToOne
     private User user;
+    @Transient
+    private List<Link> links = new ArrayList<>();
 
     public Comparison() {
         this.unixTimeStamp = System.currentTimeMillis();
@@ -82,5 +87,23 @@ public class Comparison implements Serializable {
 
     public User getUser() {
         return user;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(String url, String rel, RequestMethod method, String[] queryParams)
+    {
+        Link link = new Link();
+        link.setLink(url);
+        link.setRel(rel);
+        link.setMethod(method);
+        link.setQueryParams(queryParams);
+        links.add(link);
     }
 }
