@@ -11,7 +11,7 @@ public class PingContollerTest {
 
     // Before ALL tests
     @BeforeClass
-    public void setUp() {
+    public static void setUp() {
         RestAssured.port = 51572;
         RestAssured.baseURI = "http://localhost";
         RestAssured.basePath = "/RatherApp-1.0/rest/";
