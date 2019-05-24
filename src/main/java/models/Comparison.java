@@ -30,11 +30,11 @@ public class Comparison implements Serializable {
     private User user;
 
     public Comparison() {
-        this.unixTimeStamp = System.currentTimeMillis()/1000L;
+        this.unixTimeStamp = System.currentTimeMillis();
     }
 
     public Comparison(User user, List<Choice> choices) {
-        this.unixTimeStamp = System.currentTimeMillis()/1000L;
+        this.unixTimeStamp = System.currentTimeMillis();
         this.user = user;
         this.choices = choices;
     }
