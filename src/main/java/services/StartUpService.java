@@ -39,16 +39,25 @@ public class StartUpService {
         choices1.add(choiceDAO.addChoice(new Choice("Choice A")));
         choices1.add(choiceDAO.addChoice(new Choice("Choice B")));
         comparisonDAO.addComparison(new Comparison(poster, choices1));
+        comparisonDAO.addComparison(new Comparison(poster, choices1));
+        comparisonDAO.addComparison(new Comparison(poster, choices1));
+        comparisonDAO.addComparison(new Comparison(poster, choices1));
 
         ArrayList<Choice> choices2 = new ArrayList<>();
         choices2.add(choiceDAO.addChoice(new Choice("Choice C")));
         choices2.add(choiceDAO.addChoice(new Choice("Choice D")));
+        comparisonDAO.addComparison(new Comparison(poster, choices2));
+        comparisonDAO.addComparison(new Comparison(poster, choices2));
+        comparisonDAO.addComparison(new Comparison(poster, choices2));
         comparisonDAO.addComparison(new Comparison(poster, choices2));
 
         ArrayList<Choice> choices3 = new ArrayList<>();
         choices3.add(choiceDAO.addChoice(new Choice("Choice D")));
         choices3.add(choiceDAO.addChoice(new Choice("Choice E")));
         choices3.add(choiceDAO.addChoice(new Choice("Choice F")));
+        comparisonDAO.addComparison(new Comparison(poster, choices3));
+        comparisonDAO.addComparison(new Comparison(poster, choices3));
+        comparisonDAO.addComparison(new Comparison(poster, choices3));
         comparisonDAO.addComparison(new Comparison(poster, choices3));
     }
 }

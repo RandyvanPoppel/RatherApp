@@ -9,7 +9,7 @@ import java.util.List;
 
 @NamedQueries(value = {
         @NamedQuery(name = "comparison.getById", query = "SELECT c FROM Comparison c where c.id = :id"),
-        @NamedQuery(name = "comparison.getLatest", query = "SELECT c FROM Comparison c WHERE c.unixTimeStamp < :unixTimeStamp ORDER BY c.unixTimeStamp ASC")
+        @NamedQuery(name = "comparison.getLatest", query = "SELECT c FROM Comparison c WHERE c.unixTimeStamp < :unixTimeStamp ORDER BY c.unixTimeStamp DESC")
 })
 @Entity(name = "Comparison")
 public class Comparison implements Serializable {
