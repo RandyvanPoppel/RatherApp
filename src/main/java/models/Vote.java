@@ -1,9 +1,10 @@
 package models;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
+import models.hateoas.Link;
+
+import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity(name = "Vote")
 public class Vote {
@@ -14,6 +15,8 @@ public class Vote {
     private Choice choice;
     @ManyToOne
     private User user;
+    @Transient
+    private List<Link> links = new ArrayList<>();
 
     public Vote() {}
 
@@ -32,5 +35,18 @@ public class Vote {
 
     public User getUser() {
         return user;
+    }
+
+    public List<Link> getLinks() {
+        return links;
+    }
+
+    public void setLinks(List<Link> links) {
+        this.links = links;
+    }
+
+    public void addLink(Link link)
+    {
+        links.add(link);
     }
 }

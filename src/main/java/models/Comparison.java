@@ -1,7 +1,6 @@
 package models;
 
 import models.hateoas.Link;
-import models.hateoas.RequestMethod;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -97,13 +96,8 @@ public class Comparison implements Serializable {
         this.links = links;
     }
 
-    public void addLink(String url, String rel, RequestMethod method, String[] queryParams)
+    public void addLink(Link link)
     {
-        Link link = new Link();
-        link.setLink(url);
-        link.setRel(rel);
-        link.setMethod(method);
-        link.setQueryParams(queryParams);
         links.add(link);
     }
 }
