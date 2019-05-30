@@ -8,4 +8,6 @@ public interface IUserDAO {
     User updateUser(User user);
 
     User getById(long userId);
+
+    User getByUsername(String username);
 }

@@ -10,6 +10,7 @@ import services.VoteService;
 import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.ws.rs.*;
+import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.UriInfo;
@@ -30,8 +31,10 @@ public class ComparisonController {
     @Consumes({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Comparison addComparison(@QueryParam("choiceDescriptions") final List<String> choices,
-                                    @Context UriInfo uriInfo) {
-        Comparison comparison = comparisonService.addComparison(choices);
+                                    @Context UriInfo uriInfo,
+                                    ContainerRequestContext requestContext) {
+        System.out.println(requestContext.getHeaderString("userId"));
+        Comparison comparison = comparisonService.addComparison(Long.parseLong(requestContext.getHeaderString("userId")), choices);
         comparison.addLink(createLink(uriInfo, "self", "add", RequestMethod.POST, new String[]{"choiceDescriptions"}));
         comparison.addLink(createLink(uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"unixTimeStamp"}));
         comparison.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
@@ -59,8 +62,10 @@ public class ComparisonController {
     @Produces({MediaType.APPLICATION_XML, MediaType.APPLICATION_JSON})
     public Vote vote(@QueryParam("comparisonId") final long comparisonId,
                      @QueryParam("choiceId") final long choiceId,
-                     @Context UriInfo uriInfo) {
-        Vote vote = voteService.vote(comparisonId, choiceId);
+                     @Context UriInfo uriInfo,
+                     ContainerRequestContext requestContext) {
+        System.out.println(requestContext.getHeaderString("userId"));
+        Vote vote = voteService.vote(Long.parseLong(requestContext.getHeaderString("userId")), comparisonId, choiceId);
         vote.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
         return vote;
     }

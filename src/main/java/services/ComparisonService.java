@@ -25,14 +25,13 @@ public class ComparisonService {
 
     public ComparisonService() {}
 
-    public Comparison addComparison(List<String> choiceStrings) {
+    public Comparison addComparison(long userId, List<String> choiceStrings) {
         List<Choice> choices = new ArrayList<>();
         for (String choiceString : choiceStrings) {
             Choice choice = new Choice(choiceString);
             choices.add(choiceDAO.addChoice(choice));
         }
-        // TODO: [AUTH] Get user from Authentication system
-        User postingUser = userDAO.getById(1);
+        User postingUser = userDAO.getById(userId);
 
         return comparisonDAO.addComparison(new Comparison(postingUser, choices));
     }

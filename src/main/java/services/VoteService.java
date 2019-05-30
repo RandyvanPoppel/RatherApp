@@ -28,15 +28,14 @@ public class VoteService {
 
     public VoteService() {}
 
-    public Vote vote(long comparisonId, long choiceId) {
+    public Vote vote(long userId, long comparisonId, long choiceId) {
         Choice choice = choiceDAO.getById(choiceId);
         if (choice != null)
         {
             Comparison comparison = comparisonDAO.getById(comparisonId);
             if (comparison != null)
             {
-                // TODO: [AUTH] Get user from Authentication system
-                User votingUser = userDAO.getById(2);
+                User votingUser = userDAO.getById(userId);
 
                 Vote vote = new Vote(votingUser, choice);
                 if(comparison.addOrUpdateVote(vote))
