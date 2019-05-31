@@ -1,8 +1,8 @@
 package controllers;
 
+import controllers.hateoas.HATEOAS;
 import models.Comparison;
 import models.Vote;
-import models.hateoas.Link;
 import models.hateoas.RequestMethod;
 import services.ComparisonService;
 import services.VoteService;
@@ -32,9 +32,9 @@ public class ComparisonController {
     public Comparison addComparison(@QueryParam("choiceDescriptions") final List<String> choices,
                                     @Context UriInfo uriInfo) {
         Comparison comparison = comparisonService.addComparison(choices);
-        comparison.addLink(createLink(uriInfo, "self", "add", RequestMethod.POST, new String[]{"choiceDescriptions"}));
-        comparison.addLink(createLink(uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"unixTimeStamp"}));
-        comparison.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
+        comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "self", "add", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"choiceDescriptions"}));
+        comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"Authorization: tokenString"}, new String[]{"unixTimeStamp"}));
+        comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"comparisonId", "choiceId"}));
         return comparison;
     }
 
@@ -46,9 +46,9 @@ public class ComparisonController {
                                                  @Context UriInfo uriInfo) {
         List<Comparison> comparisons = comparisonService.getLatestComparisons(unixTimeStamp);
         for (Comparison comparison : comparisons) {
-            comparison.addLink(createLink(uriInfo, "add", "add", RequestMethod.POST, new String[]{"choiceDescriptions"}));
-            comparison.addLink(createLink(uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"unixTimeStamp"}));
-            comparison.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
+            comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "self", "getLatest", RequestMethod.GET, new String[]{"Authorization: tokenString"}, new String[]{"unixTimeStamp"}));
+            comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "add", "add", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"choiceDescriptions"}));
+            comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"comparisonId", "choiceId"}));
         }
         return comparisons;
     }
@@ -61,16 +61,9 @@ public class ComparisonController {
                      @QueryParam("choiceId") final long choiceId,
                      @Context UriInfo uriInfo) {
         Vote vote = voteService.vote(comparisonId, choiceId);
-        vote.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
+        vote.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "self", "vote", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"comparisonId", "choiceId"}));
+        vote.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "add", "add", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"choiceDescriptions"}));
+        vote.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"Authorization: tokenString"}, new String[]{"unixTimeStamp"}));
         return vote;
-    }
-
-    private Link createLink(UriInfo uriInfo, String rel, String pathAfterBaseUri, RequestMethod method, String[] queryParams) {
-        String uri = uriInfo.getBaseUriBuilder()
-                .path(ComparisonController.class)
-                .path(pathAfterBaseUri)
-                .build()
-                .toString();
-        return new Link(uri, rel, method, queryParams);
     }
 }
