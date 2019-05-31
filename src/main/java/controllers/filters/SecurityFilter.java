@@ -28,8 +28,8 @@ public class SecurityFilter implements ContainerRequestFilter {
 
     @Override
     public void filter(ContainerRequestContext requestContext) throws IOException {
+        Response unauthorizedResponse = Response.status(Response.Status.UNAUTHORIZED).build();
         if (requestContext.getHeaders().get("Authorization") != null) {
-            Response unauthorizedResponse = Response.status(Response.Status.UNAUTHORIZED).build();
             String tokenString = requestContext.getHeaders().get("Authorization").get(0);
             tokenString = tokenString.split(" ")[1];
             HttpResponse<JsonNode> body = null;
@@ -55,6 +55,8 @@ public class SecurityFilter implements ContainerRequestFilter {
             } else {
                 requestContext.abortWith(unauthorizedResponse);
             }
+        } else {
+            requestContext.abortWith(unauthorizedResponse);
         }
     }
 }
