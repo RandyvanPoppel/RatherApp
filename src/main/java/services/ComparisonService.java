@@ -15,7 +15,7 @@ import java.util.List;
 @Stateless
 public class ComparisonService {
     @Inject
-    private IUserDAO userDAO;
+    private UserService userService;
 
     @Inject
     private IChoiceDAO choiceDAO;
@@ -31,8 +31,7 @@ public class ComparisonService {
             Choice choice = new Choice(choiceString);
             choices.add(choiceDAO.addChoice(choice));
         }
-        User postingUser = userDAO.getById(userId);
-
+        User postingUser = userService.getById(userId);
         return comparisonDAO.addComparison(new Comparison(postingUser, choices));
     }
 

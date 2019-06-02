@@ -29,10 +29,10 @@ public class StartUpService {
 
     @PostConstruct
     private void initStart() {
-        User poster = new User("user");
+        User poster = new User(1, "user");
         userDAO.addUser(poster);
 
-        User rater = new User("admin");
+        User rater = new User(2, "admin");
         userDAO.addUser(rater);
 
         ArrayList<Choice> choices1 = new ArrayList<>();

@@ -9,16 +9,15 @@ import java.io.Serializable;
 @Entity(name = "User")
 public class User implements Serializable {
     @Id
-    @GeneratedValue
     private long id;
 
-    @Column(unique = true)
     private String username;
 
     public User() {
     }
 
-    public User(String username) {
+    public User(long id, String username) {
+        this.id = id;
         this.username = username;
     }
 
@@ -28,5 +27,9 @@ public class User implements Serializable {
 
     public String getUsername() {
         return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
     }
 }

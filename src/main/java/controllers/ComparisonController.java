@@ -1,10 +1,15 @@
 package controllers;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import models.Comparison;
+import models.User;
 import models.Vote;
 import models.hateoas.Link;
 import models.hateoas.RequestMethod;
 import services.ComparisonService;
+import services.UserService;
 import services.VoteService;
 
 import javax.ejb.Stateless;
@@ -21,6 +26,9 @@ import java.util.List;
 public class ComparisonController {
 
     @Inject
+    private UserService userService;
+
+    @Inject
     private ComparisonService comparisonService;
 
     @Inject
@@ -33,8 +41,8 @@ public class ComparisonController {
     public Comparison addComparison(@QueryParam("choiceDescriptions") final List<String> choices,
                                     @Context UriInfo uriInfo,
                                     ContainerRequestContext requestContext) {
-        System.out.println(requestContext.getHeaderString("userId"));
-        Comparison comparison = comparisonService.addComparison(Long.parseLong(requestContext.getHeaderString("userId")), choices);
+        User user = findOrCreateAuthenticatedUser(requestContext.getHeaderString("authUser"));
+        Comparison comparison = comparisonService.addComparison(user.getId(), choices);
         comparison.addLink(createLink(uriInfo, "self", "add", RequestMethod.POST, new String[]{"choiceDescriptions"}));
         comparison.addLink(createLink(uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"unixTimeStamp"}));
         comparison.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
@@ -64,8 +72,8 @@ public class ComparisonController {
                      @QueryParam("choiceId") final long choiceId,
                      @Context UriInfo uriInfo,
                      ContainerRequestContext requestContext) {
-        System.out.println(requestContext.getHeaderString("userId"));
-        Vote vote = voteService.vote(Long.parseLong(requestContext.getHeaderString("userId")), comparisonId, choiceId);
+        User user = findOrCreateAuthenticatedUser(requestContext.getHeaderString("authUser"));
+        Vote vote = voteService.vote(user.getId(), comparisonId, choiceId);
         vote.addLink(createLink(uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"comparisonId", "choiceId"}));
         return vote;
     }
@@ -77,5 +85,28 @@ public class ComparisonController {
                 .build()
                 .toString();
         return new Link(uri, rel, method, queryParams);
+    }
+
+    private User findOrCreateAuthenticatedUser(String resultobject) {
+        JsonParser parser = new JsonParser();
+        JsonElement jsonElement = parser.parse(resultobject);
+        JsonObject jsonObject = jsonElement.getAsJsonObject();
+
+        long id = jsonObject.get("id").getAsLong();
+        String username = jsonObject.get("username").getAsString();
+
+        User user = userService.getById(id);
+        if (user != null)
+        {
+            if (!user.getUsername().equals(username))
+            {
+                user.setUsername(username);
+                userService.updateUser(user);
+            }
+        }
+        else {
+            user = userService.addUser(id, username);
+        }
+        return user;
     }
 }
