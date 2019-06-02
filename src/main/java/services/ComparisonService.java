@@ -2,7 +2,6 @@ package services;
 
 import dao.blueprint.IChoiceDAO;
 import dao.blueprint.IComparisonDAO;
-import dao.blueprint.IUserDAO;
 import models.Choice;
 import models.Comparison;
 import models.User;
