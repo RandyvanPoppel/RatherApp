@@ -2,7 +2,6 @@ package services;
 
 import dao.blueprint.IChoiceDAO;
 import dao.blueprint.IComparisonDAO;
-import dao.blueprint.IUserDAO;
 import models.Choice;
 import models.Comparison;
 import models.User;
@@ -15,7 +14,7 @@ import java.util.List;
 @Stateless
 public class ComparisonService {
     @Inject
-    private IUserDAO userDAO;
+    private UserService userService;
 
     @Inject
     private IChoiceDAO choiceDAO;
@@ -25,15 +24,13 @@ public class ComparisonService {
 
     public ComparisonService() {}
 
-    public Comparison addComparison(List<String> choiceStrings) {
+    public Comparison addComparison(long userId, List<String> choiceStrings) {
         List<Choice> choices = new ArrayList<>();
         for (String choiceString : choiceStrings) {
             Choice choice = new Choice(choiceString);
             choices.add(choiceDAO.addChoice(choice));
         }
-        // TODO: [AUTH] Get user from Authentication system
-        User postingUser = userDAO.getById(1);
-
+        User postingUser = userService.getById(userId);
         return comparisonDAO.addComparison(new Comparison(postingUser, choices));
     }
 
