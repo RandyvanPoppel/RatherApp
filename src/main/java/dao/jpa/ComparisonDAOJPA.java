@@ -1,24 +1,20 @@
 package dao.jpa;
 
 import dao.blueprint.IComparisonDAO;
+import dao.jpa.config.DAOJPA;
 import dao.jpa.config.JPA;
 import models.Comparison;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @JPA
 @Stateless
 @Default
-public class ComparisonDAOJPA implements IComparisonDAO {
+public class ComparisonDAOJPA extends DAOJPA implements IComparisonDAO {
     private static final int AMOUTOFRESULTS = 12;
-
-    @PersistenceContext(unitName = "localhost")
-    private EntityManager em;
 
     @Override
     public Comparison addComparison(Comparison comparison) {

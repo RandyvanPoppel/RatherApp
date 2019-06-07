@@ -1,22 +1,19 @@
 package dao.jpa;
 
 import dao.blueprint.IUserDAO;
+import dao.jpa.config.DAOJPA;
 import dao.jpa.config.JPA;
 import models.User;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import java.util.List;
 
 @JPA
 @Stateless
 @Default
-public class UserDAOJPA implements IUserDAO {
-    @PersistenceContext(unitName = "localhost")
-    private EntityManager em;
+public class UserDAOJPA extends DAOJPA implements IUserDAO {
 
     @Override
     public User addUser(User user) {

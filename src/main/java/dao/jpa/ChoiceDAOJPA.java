@@ -2,11 +2,10 @@ package dao.jpa;
 
 import javax.ejb.Stateless;
 import javax.enterprise.inject.Default;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 
 import dao.blueprint.IChoiceDAO;
+import dao.jpa.config.DAOJPA;
 import dao.jpa.config.JPA;
 import models.Choice;
 
@@ -15,9 +14,7 @@ import java.util.List;
 @JPA
 @Stateless
 @Default
-public class ChoiceDAOJPA implements IChoiceDAO {
-    @PersistenceContext(unitName = "localhost")
-    private EntityManager em;
+public class ChoiceDAOJPA extends DAOJPA implements IChoiceDAO {
 
     @Override
     public Choice addChoice(Choice choice) {
