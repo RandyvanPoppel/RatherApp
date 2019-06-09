@@ -2,6 +2,7 @@ package services;
 
 import dao.blueprint.IChoiceDAO;
 import dao.blueprint.IComparisonDAO;
+import dao.blueprint.IUserDAO;
 import models.Choice;
 import models.Comparison;
 import models.User;
@@ -14,7 +15,7 @@ import java.util.List;
 @Stateless
 public class ComparisonService {
     @Inject
-    private UserService userService;
+    private IUserDAO userDAO;
 
     @Inject
     private IChoiceDAO choiceDAO;
@@ -24,14 +25,14 @@ public class ComparisonService {
 
     public ComparisonService() {}
 
-    public Comparison addComparison(long userId, List<String> choiceStrings) {
+    public Comparison addComparison(User user, List<String> choiceStrings) {
+        System.out.println(userDAO.getById(1));
         List<Choice> choices = new ArrayList<>();
         for (String choiceString : choiceStrings) {
             Choice choice = new Choice(choiceString);
             choices.add(choiceDAO.addChoice(choice));
         }
-        User postingUser = userService.getById(userId);
-        return comparisonDAO.addComparison(new Comparison(postingUser, choices));
+        return comparisonDAO.addComparison(new Comparison(user, choices));
     }
 
     public List<Comparison> getLatestComparisons(long unixTimeStamp)
@@ -42,5 +43,17 @@ public class ComparisonService {
     public Comparison getById(long comparisonId)
     {
         return comparisonDAO.getById(comparisonId);
+    }
+
+    public void setUserDAO(IUserDAO userDAO) {
+        this.userDAO = userDAO;
+    }
+
+    public void setChoiceDAO(IChoiceDAO choiceDAO) {
+        this.choiceDAO = choiceDAO;
+    }
+
+    public void setComparisonDAO(IComparisonDAO comparisonDAO) {
+        this.comparisonDAO = comparisonDAO;
     }
 }

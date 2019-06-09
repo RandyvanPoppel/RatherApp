@@ -31,22 +31,13 @@ public class ComparisonServiceTest {
     private ComparisonService comparisonService;
 
     @Mock
-    private UserService userService;
-
-    @Mock
     private UserDAOJPA userDAOJPA;
 
     @Mock
     private ChoiceDAOJPA choiceDAOJPA;
 
     @Mock
-    private ComparisonDAOJPA comparisonDAOJPAMock;
-
-    @InjectMocks
     private ComparisonDAOJPA comparisonDAOJPA;
-
-    @InjectMocks
-    private VoteDAOJPA voteDAOJPA;
 
     private EntityManagerFactory entityManagerFactory = Persistence.createEntityManagerFactory("localhost_test");
     private EntityManager entityManager;
@@ -65,15 +56,15 @@ public class ComparisonServiceTest {
 
         userDAOJPA = new UserDAOJPA();
         userDAOJPA.setEntityManager(entityManager);
+        comparisonService.setUserDAO(userDAOJPA);
 
         choiceDAOJPA = new ChoiceDAOJPA();
         choiceDAOJPA.setEntityManager(entityManager);
+        comparisonService.setChoiceDAO(choiceDAOJPA);
 
         comparisonDAOJPA = new ComparisonDAOJPA();
         comparisonDAOJPA.setEntityManager(entityManager);
-
-        voteDAOJPA = new VoteDAOJPA();
-        voteDAOJPA.setEntityManager(entityManager);
+        comparisonService.setComparisonDAO(comparisonDAOJPA);
 
         choiceStrings = new ArrayList<>();
         choiceStrings.add("Choice1");
@@ -89,12 +80,12 @@ public class ComparisonServiceTest {
     }
 
     @Test
-    public void addComparison()
+    public void addComparisonAndGetById()
     {
-        Comparison testComparison1 = comparisonService.addComparison(user1.getId(), choiceStrings);
+        Comparison testComparison1 = comparisonService.addComparison(user1, choiceStrings);
 
         transaction.begin();
-        Comparison testComparison2 = comparisonDAOJPA.getById(testComparison1.getId());
+        Comparison testComparison2 = comparisonService.getById(testComparison1.getId());
         transaction.commit();
 
         Assert.assertEquals(testComparison1, testComparison2);

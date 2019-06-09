@@ -42,7 +42,7 @@ public class ComparisonController {
                                     @Context UriInfo uriInfo,
                                     ContainerRequestContext requestContext) {
         User user = findOrCreateAuthenticatedUser(requestContext.getHeaderString("authUser"));
-        Comparison comparison = comparisonService.addComparison(user.getId(), choices);
+        Comparison comparison = comparisonService.addComparison(user, choices);
         comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "self", "add", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"choiceDescriptions"}));
         comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "getLatest", "getLatest", RequestMethod.GET, new String[]{"Authorization: tokenString"}, new String[]{"unixTimeStamp"}));
         comparison.addLink(HATEOAS.createLink(ComparisonController.class, uriInfo, "vote", "vote", RequestMethod.POST, new String[]{"Authorization: tokenString"}, new String[]{"comparisonId", "choiceId"}));
