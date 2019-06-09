@@ -7,13 +7,14 @@ import dao.jpa.VoteDAOJPA;
 import models.Choice;
 import models.Comparison;
 import models.User;
+import org.junit.After;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import services.ComparisonService;
-import services.UserService;
+import util.DatabaseCleaner;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
@@ -77,6 +78,13 @@ public class ComparisonServiceTest {
         user1 = userDAOJPA.addUser(user1);
         choice1 = choiceDAOJPA.addChoice(choice1);
         transaction.commit();
+    }
+
+    @After
+    public void tearDown() throws Exception {
+        new DatabaseCleaner(entityManager).clean();
+        this.entityManager.clear();
+        this.entityManager.close();
     }
 
     @Test
