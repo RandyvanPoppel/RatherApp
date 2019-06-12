@@ -26,7 +26,6 @@ public class ComparisonServiceTest {
     private IComparisonDAO comparisonDAO;
 
     private User user1;
-    private Choice choice1;
     private List<String> choiceStrings;
     private List<Choice> choices;
 
