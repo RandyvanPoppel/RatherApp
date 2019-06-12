@@ -26,7 +26,6 @@ public class ComparisonService {
     public ComparisonService() {}
 
     public Comparison addComparison(User user, List<String> choiceStrings) {
-        System.out.println(userDAO.getById(1));
         List<Choice> choices = new ArrayList<>();
         for (String choiceString : choiceStrings) {
             Choice choice = new Choice(choiceString);
